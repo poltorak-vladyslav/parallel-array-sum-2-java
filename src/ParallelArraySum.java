@@ -12,11 +12,11 @@ public class ParallelArraySum {
 
         while (array.length > 1) {
             int length = array.length / 2; // Кількість пар
-            AtomicIntegerArray currentArray = new AtomicIntegerArray(array); // Масив для поточної хвилі
-            CountDownLatch latch = new CountDownLatch(length); // Синхронізація хвилі
+            AtomicIntegerArray currentArray = new AtomicIntegerArray(array); // Масив для поточної ітерації
+            CountDownLatch latch = new CountDownLatch(length); // Синхронізація ітерації
 
             for (int i = 0; i < length; i++) {
-                int index = i; // Остаточний індекс для потоку
+                int index = i;
                 executor.submit(() -> {
                     int sum = currentArray.get(index) + currentArray.get(currentArray.length() - 1 - index); // Обчислення суми пари
                     currentArray.set(index, sum); // Оновлення елемента з меншим індексом
@@ -24,9 +24,9 @@ public class ParallelArraySum {
                 });
             }
 
-            latch.await(); // Очікування завершення всіх потоків у хвилі
+            latch.await(); // Очікування завершення всіх потоків в ітерації
 
-            // Оновлення масиву для наступної хвилі
+            // Оновлення масиву для наступної ітерації
             // Створюємо новий масив для зберігання результатів
             int[] newArray = new int[length + (array.length % 2)]; // Додаємо 1, якщо є непарна кількість елементів
 
